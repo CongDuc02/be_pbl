@@ -41,7 +41,7 @@ const createUser = (newUser) => {
 
 const loginUser = (userLogin) => {
   return new Promise(async (resolve, reject) => {
-    const { name, email, password, confirmPassword, phone } = userLogin;
+    const {email, password } = userLogin;
 
     try {
       const checkUser = await User.findOne({
@@ -54,7 +54,6 @@ const loginUser = (userLogin) => {
         })
       }
       const comparePassword = bcrypt.compareSync(password, checkUser.password)
-      console.log('comparePassword', comparePassword)
 
       if (!comparePassword) {
       resolve({
@@ -153,6 +152,21 @@ const deleteUser = (id) => {
   })
 }
 
+const deleteManyUser = (ids) => {
+  return new Promise(async (resolve, reject) => {
+      try {
+
+          await User.deleteMany({ _id: ids })
+          resolve({
+              status: 'OK',
+              message: 'Delete user success',
+          })
+      } catch (e) {
+          reject(e)
+      }
+  })
+}
+
 const getAllUser = () => {
   return new Promise(async (resolve, reject) => {
       try {
@@ -187,7 +201,7 @@ const getDetailsUser = (id) => {
 
           resolve({
               status: 'OK',
-              message: 'Delete user success',
+              message: 'Success',
               data: user
               
               
@@ -200,6 +214,7 @@ const getDetailsUser = (id) => {
 
 
 
+
 module.exports = {
   createUser,
   loginUser,
@@ -207,5 +222,5 @@ module.exports = {
   deleteUser,
   getAllUser,
   getDetailsUser,
-  // deleteManyUser
+  deleteManyUser
 };
